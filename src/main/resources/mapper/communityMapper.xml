@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="community">
+
+    <select id="communityList"  resultType="community">
+        select * from community c left join cmntyComment cc on cc.cmntyNo = c.cmntyNo
+        left join customers c2 on c2.customerNumber = c.customerNumber
+    </select>
+
+    <select id="findByCommunityNo" parameterType="Integer"   resultType="community">
+        select * from community c left join cmntyComment cc on cc.cmntyNo = c.cmntyNo
+        left join customers c2 on c2.customerNumber = c.customerNumber where c.cmntyNo = #{cmntyNo}
+    </select>
+
+
+    <select id="pagingList" parameterType="java.util.HashMap" resultType="community">
+        select * from community c left join cmntyComment cc on cc.cmntyNo = c.cmntyNo
+        left join customers c2 on c2.customerNumber = c.customerNumber
+        <if test="keyword != null">
+            WHERE c.cmntyTitle LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="category != null">
+            AND c.cmntyType LIKE CONCAT('%', #{category}, '%')
+        </if>
+        LIMIT #{start}, #{limit}
+    </select>
+
+
+    <select id="communityCount" resultType="Integer">
+        select count(cmntyNo) from community
+        <if test="keyword != null">
+            WHERE cmntyTitle LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="category != null">
+            AND cmntyType LIKE CONCAT('%', #{category}, '%')
+        </if>
+    </select>
+
+
+    <insert id="save" parameterType="community">
+        insert into community (cmntyNo , customerNumber , cmntyTitle , cmntyContent , cmntyType)
+        values(#{cmntyNo}, #{customerNumber}, #{cmntyTitle}, #{cmntyContent}, #{cmntyType})
+    </insert>
+
+
+</mapper>

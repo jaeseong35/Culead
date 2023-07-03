@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.jaeseong.dto.EmployeesDTO" alias="employees"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.ProductsDTO" alias="products"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.CustomersDTO" alias="customers"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.PaymentDTO" alias="payments"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.OrdersDTO" alias="orders"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.OrderDetailsDTO" alias="orderDetails"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.CommentDTO" alias="comment"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.HeartlistDTO" alias="heartlist"></typeAlias>
+        <typeAlias type="com.jaeseong.dto.CommunityDTO" alias="community"></typeAlias>
+    </typeAliases>
+</configuration>

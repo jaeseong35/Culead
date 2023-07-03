@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Employees">
+    <insert id="save" parameterType="employees">
+        insert into employees(employeeNumber, email, firstName, lastName, officeCode, extension, reportsTo, jobTitle)
+        values (#{employeeNumber}, #{email}, #{firstName}, #{lastName}, #{officeCode}, #{extension}, #{reportsTo}, #{jobTitle})
+    </insert>
+    <select id="login" parameterType="employees" resultType="employees">
+        select * from employees where email=#{email} and employeeNumber=#{employeeNumber}
+    </select>
+    <select id="findAll" resultType="employees">
+        select * from employees
+    </select>
+    <select id="findById" parameterType="Long" resultType="employees">
+        select * from employees e join offices o ON e.officeCode = o.officeCode WHERE e.employeeNumber =#{employeeNumber}
+    </select>
+    <delete id="delete" parameterType="Long">
+        delete from employees where employeeNumber=#{employeeNumber}
+    </delete>
+    <select id="findByEmployeesEmail" parameterType="String" resultType="employees">
+        select * from employees e join offices o ON e.officeCode = o.officeCode where email=#{loginEmail}
+    </select>
+    <update id="update" parameterType="employees">
+        update employees set officeCode=#{officeCode}, extension=#{extension}, reportsTo=#{reportsTo}, jobTitle=#{jobTitle}
+        where employeeNumber=#{employeeNumber}
+    </update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

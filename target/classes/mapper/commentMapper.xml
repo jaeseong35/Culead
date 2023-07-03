@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comment">
+    <insert id="save" parameterType="comment">
+        insert into comment (commentWriter, commentContents, productCode)
+        values(#{commentWriter}, #{commentContents}, #{productCode})
+    </insert>
+
+    <insert id="childCommentsSave" parameterType="comment">
+        insert into comment (commentWriter, commentContents, productCode, parent_id, parent_writer)
+        values(#{commentWriter}, #{commentContents}, #{productCode}, #{parent_id}, #{parent_writer})
+    </insert>
+
+    <select id="findAll" parameterType="String"  resultType="comment">
+        select * from comment c WHERE c.productCode=#{productCode};
+    </select>
+    <select id="findParentComments" parameterType="String"  resultType="comment">
+        select * from comment c WHERE c.productCode=#{productCode} AND parent_id is NULL ;
+    </select>
+    <select id="findChildComments" parameterType="String"  resultType="comment">
+        select * from comment c WHERE c.productCode=#{productCode} AND parent_id is not NULL ;
+    </select>
+
+    <select id="resentCommentList"  resultType="comment">
+        SELECT DISTINCT c.*, c2.contactFirstName, c2.image "image"
+        FROM comment c, customers c2
+        WHERE c2.contactFirstName = c.commentWriter
+        ORDER BY c.commentCreatedTime
+        desc limit 0,6;
+    </select>
+
+    <select id="CommentList" resultType="comment">
+        SELECT DISTINCT c.*, p.productName 'productName', p.image 'image'
+        FROM comment c
+        JOIN products p ON p.productCode = c.productCode
+        ORDER BY c.commentCreatedTime DESC
+        LIMIT #{start}, #{limit}
+    </select>
+
+
+    <delete id="delete" parameterType="String">
+        delete from comment where id=#{id}
+    </delete>
+
+    <select id="commentCount" resultType="Integer">
+        select count(*) from comment
+    </select>
+
+    <select id="CommentAvgStarNo" resultType="double">
+        SELECT ROUND(avg(starNo)*20, 2) 'avgStarNo' FROM comment;
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+/* Custom CSS for paging.jsp */
+
+/* Styling for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Styling for search form */
+form {
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button[type="submit"] {
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Styling for paging links */
+div.paging-links {
+  margin-top: 20px;
+}
+
+.paging-links span,
+.paging-links a {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.paging-links span {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.paging-links a:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Styling for quantityInStock cell with low stock */
+table tr.low-stock td {
+  color: red;
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Customers">
+    <select id="findAll" resultType="customers">
+        select * from customers order by customerNumber desc
+    </select>
+    <insert id="save" parameterType="customers">
+        insert into customers(customerNumber, customerName, contactLastName, contactFirstName, phone, addressLine1, addressLine2, city, state, postalCode, country, salesRepEmployeeNumber, creditLimit)
+        values(#{customerNumber}, #{customerName}, #{contactLastName}, #{contactFirstName}, #{phone}, #{addressLine1}, #{addressLine2}, #{city}, #{state}, #{postalCode}, #{country}, #{salesRepEmployeeNumber}, #{creditLimit})
+    </insert>
+
+    <select id="pagingList" parameterType="java.util.HashMap" resultType="customers">
+        select CONCAT(contactFirstName, contactLastName), customerNumber, customerName, contactLastName, contactFirstName, phone , addressLine1
+        addressLine2 , city , state , postalCode , country , salesRepEmployeeNumber , creditLimit  from customers
+        <if test="keyword != null">
+        WHERE (CONCAT(contactFirstName, contactLastName) LIKE CONCAT('%', #{keyword}, '%')
+            or customerName LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="country != null">   and country LIKE CONCAT('%', #{country}, '%')
+        </if>
+        order by CONCAT(contactFirstName, contactLastName) desc limit #{start}, #{limit}
+    </select>
+
+    <select id="selectedCountryList" parameterType="java.util.HashMap" resultType="customers">
+        select CONCAT(contactFirstName, contactLastName), customerNumber, customerName, contactLastName, contactFirstName, phone , addressLine1
+        addressLine2 , city , state , postalCode , country , salesRepEmployeeNumber , creditLimit  from customers
+        <if test="keyword != null">
+            WHERE (CONCAT(contactFirstName, contactLastName) LIKE CONCAT('%', #{keyword}, '%')
+            or customerName LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="country != null">   and country LIKE CONCAT('%', #{country}, '%')
+        </if>
+        order by CONCAT(contactFirstName, contactLastName) desc limit #{start}, #{limit}
+    </select>
+
+    <select id="countryList"  resultType="String">
+        select DISTINCT country  from customers order by country
+    </select>
+
+    <select id="customersCount" resultType="Integer">
+        select count(CONCAT(contactFirstName, contactLastName)) from customers
+        <if test="keyword != null">
+            WHERE CONCAT(contactFirstName, contactLastName) LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="country != null">
+        AND country LIKE CONCAT('%', #{country}, '%')
+        </if>
+    </select>
+    <select id="findBySalesRepEmployeeNumber" parameterType="Long" resultType="customers">
+        select * from customers WHERE salesRepEmployeeNumber = #{salesRepEmployeeNumber};
+    </select>
+    <select id="findByCustomerNumberPaymentList" parameterType="int" resultType="payments">
+        select * from payments WHERE customerNumber = #{customerNumber};
+    </select>
+    <select id="findByCustomerNumberOrderList" parameterType="int" resultType="orders">
+        select * from orders WHERE customerNumber = #{customerNumber};
+    </select>
+    <select id="findByOrderNumber" parameterType="int" resultType="orderDetails">
+        select * from orderdetails WHERE orderNumber = #{orderNumber};
+    </select>
+    <delete id="delete" parameterType="String">
+        delete from customers where customerNumber=#{customerNumber}
+    </delete>
+    <select id="login" parameterType="customers" resultType="customers">
+        select * from customers where customerNumber=#{customerNumber} and contactFirstName=#{contactFirstName}
+    </select>
+    <select id="findPassword" parameterType="customers" resultType="customers">
+        select customerNumber, customerName, phone, contactLastName, contactFirstName from customers where contactFirstName=#{contactFirstName} and phone=#{phone}
+    </select>
+    <select id="findNumber" parameterType="customers" resultType="customers">
+        select customerNumber from customers where contactFirstName=#{contactFirstName} and phone=#{phone}
+    </select>
+    <select id="findByCustomerNumber" parameterType="int" resultType="customers">
+        select * from customers where customerNumber=#{customerNumber}
+    </select>
+    <select id="findByCustomerName" parameterType="String" resultType="customers">
+        select * from customers where contactFirstName=#{contactFirstName}
+    </select>
+    <select id="CustomersNumbers" resultType="int">
+        select COUNT(*) "CustomersNumbers" from customers c
+    </select>
+</mapper>

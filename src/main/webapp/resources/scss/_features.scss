@@ -1,0 +1,38 @@
+//
+// _features.scss
+//
+
+/************************
+    8.  Features
+************************/
+
+.feature {
+    &.explore-feature {
+        transition: all 0.5s ease;
+        .icon {
+            height: 80px;
+            width: 80px;
+            line-height: 80px;
+            transition: all 0.5s ease;
+        }
+        &:hover {
+            box-shadow: $shadow-md !important;
+            .icon {
+                color: $primary !important;
+            }
+        }
+    }
+    .icons {
+        height: 80px;
+        line-height: 76px;
+        background: linear-gradient(45deg, transparent, rgba($primary, 0.1));
+    }
+    .content {
+        .title {
+            transition: all 0.5s ease;
+            &:hover {
+                color: $primary !important;
+            }
+        }
+    }
+}

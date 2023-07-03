@@ -1,0 +1,130 @@
+//
+// work.scss
+//
+
+/************************
+    10.  Work
+************************/
+
+.container-filter {
+    li {
+        a {
+            font-size: 13px;
+            padding: 0px 15px; 
+            margin: 5px 3px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            line-height: 34px;
+            transition: all 0.5s ease;
+            &.active,
+            &:hover {
+                color: $primary !important;
+                border-color: $primary !important;
+                background-color: rgba($primary, 0.1) !important;
+            }
+        }
+    }
+}
+
+.work-container {
+    &.work-modern {
+        .content {
+            .title {
+                font-size: 18px;
+                transition: all 0.5s ease;
+                &:hover {
+                    color: $primary !important;
+                }
+            }
+            .tag {
+                font-size: 15px !important;
+            }
+        }
+    }
+    &.work-modern {
+        img,
+        .overlay-work,
+        .content,
+        .icons,
+        .icons .work-icon {
+            transition: all 0.5s ease;
+        }
+        .overlay-work,
+        .content,
+        .icons {
+            position: absolute;
+        }
+        .overlay-work {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 0; 
+            z-index: 1;
+        }
+        .content {
+            z-index: 1;
+            bottom: 5%;
+            left: 5%;
+        }
+        .content {
+            opacity: 0;
+        }
+        .icons {
+            right: 0;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            opacity: 0;
+            .work-icon {
+                height: 45px;
+                width: 45px;
+                line-height: 42px;
+                &:hover {
+                    background: $primary !important;
+                    color: $white !important;
+                }
+            }
+        }
+        &:hover {
+            img {
+                transform: scale(1.1) rotate(3deg);
+            }
+            .overlay-work {
+                opacity: 0.65;
+            }
+            .content{
+                opacity: 1;
+            }
+            
+            .icons {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+//Event
+.event-schedule {
+    transition: all 0.5s ease;
+    .date {
+        .day {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            background: rgba($primary, 0.1);
+            line-height: 48px;
+            border: 3px solid $white;
+        }
+    }
+    .content {
+        .title {
+            transition: all 0.5s ease;
+            &:hover {
+                color: $primary !important;
+            }
+        }
+    }
+}

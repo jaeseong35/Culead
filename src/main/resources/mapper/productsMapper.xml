@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Products">
+    <insert id="save" parameterType="products">
+        insert into products(productCode, productName, productLine, discountStatus, productVendor, productDescription, quantityInStock, buyPrice, MSRP)
+        values(#{productCode}, #{productName}, #{productLine}, #{discountStatus}, #{productVendor}, #{productDescription}, #{quantityInStock}, #{buyPrice}, #{MSRP})
+    </insert>
+
+    <select id="productLineList"  resultType="String">
+        select DISTINCT productLine from products
+    </select>
+
+    <select id="findAll" resultType="products">
+        select p.productCode, p.productName, COUNT(c.productCode) 'commentsNumber', p.productLine, p.buyPrice, p.image, p.skillName
+        from products p
+        left outer join productlines p2 on p.productLine = p2.productLine
+        left outer join comment c on c.productCode = p.productCode
+        GROUP by p.productCode
+        order by productCode desc limit 0,6
+    </select>
+
+    <select id="FreeProducts" resultType="products">
+        SELECT p.productCode, p.productName, COUNT(c.productCode) 'commentsNumber', p.productLine, p.buyPrice, p.image, p.skillName
+        FROM products p
+        left outer JOIN productlines p2 ON p.productLine = p2.productLine
+        left outer JOIN comment c ON c.productCode = p.productCode
+        WHERE p.buyPrice = 0
+        GROUP BY p.productCode
+        ORDER BY productCode DESC
+        LIMIT 0, 6;
+    </select>
+
+    <select id="beginnerProducts" resultType="products">
+        SELECT p.productCode, p.productName, COUNT(c.productCode) 'commentsNumber', p.productLine, p.buyPrice, p.image, p.skillName
+        FROM products p
+        left outer JOIN productlines p2 ON p.productLine = p2.productLine
+        left outer JOIN comment c ON c.productCode = p.productCode
+        WHERE p.productLine  = '입문'
+        GROUP BY p.productCode
+        ORDER BY productCode DESC
+        LIMIT 0, 6;
+    </select>
+
+    <select id="findByProductCode" parameterType="String" resultType="products">
+        SELECT p.productCode,
+        COUNT(h.productCode) 'heartNumber', p.productCode , p.productName, p.productLine , p.discountStatus , p.productVendor , p.image,
+        p.productDescription , p.quantityInStock , p.buyPrice, p.MSRP , p.productsHits ,  h.linked
+        FROM products p
+        LEFT OUTER JOIN heartlist h ON p.productCode = h.productCode and h.linked = 1
+        LEFT OUTER JOIN customers c ON c.customerNumber = h.customerNumber
+        WHERE p.productCode = #{productCode}
+        GROUP BY p.productCode;
+    </select>
+
+
+    <select id="LoginCustomerProducts" parameterType="Integer" resultType="products">
+    SELECT p.productCode, p.productName, COUNT(c.productCode) 'commentsNumber', p.productLine, p.buyPrice, p.image
+        FROM products p
+        left outer JOIN productlines p2 ON p.productLine = p2.productLine
+        left outer JOIN comment c ON c.productCode = p.productCode
+        left outer join heartlist h on p.productCode = h.productCode
+        WHERE h.customerNumber = #{customerNumber} and h.linked = 1
+        GROUP BY p.productCode
+        ORDER BY productCode DESC
+        LIMIT 0, 2;
+    </select>
+
+    <select id="RecommendProductsDTOList" parameterType="Integer" resultType="products">
+        SELECT p.productCode, p.productName, COUNT(c.productCode) 'commentsNumber', p.productsHits, p.buyPrice, p.image,
+        p.skillName, p.productLine FROM products p
+        left outer JOIN productlines p2 ON p.productLine = p2.productLine
+        left outer JOIN comment c ON c.productCode = p.productCode
+        WHERE p.skillName IN (
+        select p.skillName  from heartlist h
+        left outer join products p on p.productCode = h.productCode
+        WHERE h.customerNumber = #{customerNumber} and h.linked = 1
+        )  and p.skillName IS NOT NULL
+        GROUP BY p.productCode
+        ORDER BY COUNT(c.productCode) DESC
+        LIMIT 0, 6;
+    </select>
+
+    <select id="productLineCount" resultType="products">
+        SELECT COUNT(productLine) 'LineCount'
+        FROM products
+        GROUP BY productLine
+        ORDER BY CASE productLine
+        WHEN '입문' THEN 1
+        WHEN '초급' THEN 2
+        WHEN '중급' THEN 3
+        WHEN '고급' THEN 4
+        ELSE 5
+        END;
+    </select>
+
+    <update id="updateHits" parameterType="String">
+        update products set productsHits = productsHits + 1 where productCode=#{productCode}
+    </update>
+    <delete id="delete" parameterType="String">
+        delete from products where productCode=#{productCode}
+    </delete>
+    <update id="update" parameterType="products">
+        update products set productName=#{productName}, productLine=#{productLine},
+        discountStatus=#{discountStatus}, productVendor=#{productVendor},
+                            productDescription=#{productDescription}, quantityInStock=#{quantityInStock},
+                            buyPrice=#{buyPrice}, MSRP=#{MSRP}
+        where productCode=#{productCode}
+    </update>
+
+    <update id="priceUp" parameterType="String">
+        update products set buyPrice= buyPrice * 1.1
+        where productCode=#{productCode}
+    </update>
+
+    <update id="priceDown" parameterType="String">
+        update products set buyPrice= buyPrice * 0.9
+        where productCode=#{productCode}
+    </update>
+
+<!--    <update id="heartUp" parameterType="String">
+        update products set MSRP = MSRP +1
+        where productCode=#{productCode}
+    </update>-->
+
+    <!-- updateOrInsertHeartlist 프로시저 호출 구성 -->
+    <update id="updateOrInsertHeartlist" statementType="CALLABLE">
+        <![CDATA[
+    {CALL updateOrInsertHeartlist(#{p_customerNumber, mode=IN, jdbcType=INTEGER}, #{p_productCode, mode=IN, jdbcType=VARCHAR})}
+  ]]>
+    </update>
+
+
+    <select id="pagingList" parameterType="java.util.HashMap" resultType="products">
+        SELECT COUNT(c.productCode) AS comments, p.productCode, p.productName, p.productLine, p.productVendor, p.productDescription, p.quantityInStock,
+        p.buyPrice, p.MSRP, p.productsHits, p.skillName, p.image, p.discountBuyPrice, p.discountStatus
+        FROM products p
+        LEFT OUTER JOIN comment c ON c.productCode = p.productCode
+        <if test="productLine != null">
+            WHERE p.productLine LIKE CONCAT('%', #{productLine}, '%')
+        </if>
+        <if test="productName != null and productName != 'ALL'">
+            AND (p.skillName LIKE #{productName} OR p.productName LIKE CONCAT('%', #{productName}, '%'))
+        </if>
+        <if test="charge != null">
+            AND p.charge LIKE CONCAT('%', #{charge}, '%')
+        </if>
+        <if test="discountStatus != null">
+            AND p.discountStatus LIKE CONCAT('%', #{discountStatus}, '%')
+        </if>
+        GROUP BY p.productCode
+        ORDER BY p.productCode DESC
+        LIMIT #{start}, #{limit}
+    </select>
+
+
+    <select id="skillNameCountList" parameterType="java.util.HashMap" resultType="products">
+        SELECT COALESCE(skillName, 'ALL') AS skillName, COUNT(skillName) AS skillNameCount
+        FROM products
+        WHERE skillName != 'null'
+        GROUP BY skillName WITH ROLLUP
+        ORDER BY
+        CASE COALESCE(skillName, 'ALL')
+        WHEN 'ALL' THEN 1
+        WHEN 'HTML/CSS' THEN 2
+        WHEN 'JavaScript' THEN 3
+        WHEN 'React' THEN 4
+        WHEN 'Python' THEN 5
+        WHEN 'Java' THEN 6
+        WHEN 'Spring' THEN 7
+        WHEN 'Vue.js' THEN 8
+        WHEN 'SQL' THEN 9
+        WHEN 'Linux' THEN 10
+        WHEN 'NetWork' THEN 11
+        ELSE 12
+        END;
+    </select>
+
+
+    <select id="productsCount" resultType="Integer">
+        select count(productCode) from products
+        <if test="productLine != null">
+            WHERE productLine LIKE CONCAT('%', #{productLine}, '%')
+        </if>
+        <if test="productName != null and productName != 'ALL'">
+            AND (skillName LIKE #{productName} OR productName LIKE CONCAT('%', #{productName}, '%'))
+        </if>
+        <if test="charge != null">
+            AND charge LIKE CONCAT('%', #{charge}, '%')
+        </if>
+        <if test="discountStatus != null">
+            AND discountStatus LIKE CONCAT('%', #{discountStatus}, '%')
+        </if>
+    </select>
+
+    <select id="pagingListSortedByPrice" parameterType="java.util.HashMap"  resultType="products">
+        select COUNT(c.productCode) "comments", p.productCode, p.productName, p.productLine, p.discountStatus, p.productVendor, p.productDescription, p.quantityInStock,
+        p.buyPrice,  p.MSRP, p.productsHits from products p
+        LEFT OUTER JOIN comment c ON c.productCode = p.productCode
+        <if test="productLine != null">
+            WHERE p.productLine LIKE CONCAT('%', #{productLine}, '%')
+        </if>
+        <if test="productName != null"> and p.productName LIKE CONCAT('%', #{productName}, '%')
+        </if>
+            GROUP BY p.productCode
+            order by p.buyPrice asc limit #{start}, #{limit}
+    </select>
+    <select id="pagingListSortedByHits" parameterType="java.util.HashMap"  resultType="products">
+        select COUNT(c.productCode) "comments", p.productCode, p.productName, p.productLine, p.discountStatus, p.productVendor, p.productDescription, p.quantityInStock,
+        p.buyPrice,  p.MSRP, p.productsHits from products p
+        LEFT OUTER JOIN comment c ON c.productCode = p.productCode
+        <if test="productLine != null">
+            WHERE productLine LIKE CONCAT('%', #{productLine}, '%')
+        </if>
+        <if test="productName != null"> and productName LIKE CONCAT('%', #{productName}, '%')
+        </if>
+        GROUP BY p.productCode
+        order by productsHits desc limit #{start}, #{limit}
+    </select>
+    <select id="pagingListSortedByComments" parameterType="java.util.HashMap"  resultType="products">
+        SELECT  COUNT(c.productCode) "comments", p.productCode, p.productName, p.productLine, p.discountStatus, p.productVendor, p.productDescription, p.quantityInStock,
+        p.buyPrice,  p.MSRP, p.productsHits
+        FROM products p
+        LEFT OUTER JOIN comment c ON c.productCode = p.productCode
+        <if test="productLine != null">
+            WHERE p.productLine LIKE CONCAT('%', #{productLine}, '%')
+        </if>
+        <if test="productName != null"> and p.productName LIKE CONCAT('%', #{productName}, '%')
+        </if>
+        GROUP BY p.productCode
+        ORDER BY COUNT(c.productCode) DESC limit #{start}, #{limit}
+    </select>
+
+    <select id="myProductsList"  parameterType="Integer"  resultType="products">
+        select p.image, p.productCode, p.productName, p.productLine, p.skillName from products p join heartlist h on h.productCode = p.productCode
+        join customers c on c.customerNumber = h.customerNumber
+        WHERE c.customerNumber = #{customerNumber} and h.linked =1
+    </select>
+
+</mapper>

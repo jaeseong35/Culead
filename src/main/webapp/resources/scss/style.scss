@@ -1,0 +1,44 @@
+/* Template Name: Culead - Co-working HTML Template
+   Author: Uniquecrew
+   Website: http://Uniquecrew.in
+   Email: uniquecrewdesign@gmail.com
+   Version: 1.0
+   Created: September 2020
+   File Description: Main Css file of the template
+*/
+
+/****************************/
+/*         INDEX            */
+/*===========================
+ *     01.  Variables       *
+ *     02.  General         *
+ *     03.  Helper          *
+ *     04.  Boostrap Custom *
+ *     05.  Components      *
+ *     06.  Menu            *
+ *     07.  Home            *
+ *     08.  Features        *
+ *     09.  CTA             *
+ *     10.  Work            *
+ *     11.  Price           *
+ *     12.  Testi           *
+ *     13.  Blog / News     *
+ *     14.  Contact         *
+ *     15.  Footer         *
+ ===========================*/
+
+@import "variables";
+@import "general";
+@import "helper";
+@import "bootstrap-custom";
+@import "components";
+@import "menu";
+@import "home";
+@import "features";
+@import "cta";
+@import "work";
+@import "price";
+@import "testi";
+@import "blog";
+@import "contact";
+@import "footer";

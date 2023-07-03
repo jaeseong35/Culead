@@ -1,0 +1,64 @@
+/* save.css */
+
+/* 전체 스타일 */
+body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+}
+
+/* 컨테이너 스타일 */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 제목 스타일 */
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* 입력 폼 스타일 */
+form {
+  margin-bottom: 20px;
+}
+
+
+input[type="text"],
+input[type="number"],
+select,
+textarea{
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="submit"] {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #555;
+}
+
+/* 체크 결과 스타일 */
+#check-result {
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+#check-result.green {
+  color: green;
+}
+
+#check-result.red {
+  color: red;
+}

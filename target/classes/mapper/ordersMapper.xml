@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Orders">
+    <select id="findAll" resultType="orders">
+        select * from orders order by orderNumber desc
+    </select>
+    <select id="pagingList" parameterType="java.util.HashMap" resultType="orders">
+        select orderNumber , orderDate , requiredDate , shippedDate, status , comments , customerNumber  from orders
+        <if test="keyword != null">
+            WHERE orderNumber LIKE CONCAT('%', #{keyword}, '%') and 1 <![CDATA[<]]> TO_DAYS(NOW())-TO_DAYS(requiredDate)
+        </if> order by orderNumber desc limit #{start}, #{limit}
+    </select>
+
+    <select id="ordersCount" resultType="Integer">
+        select count(orderNumber) from orders
+    </select>
+</mapper>

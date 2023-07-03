@@ -1,0 +1,33 @@
+//
+// price.scss
+//
+
+/************************
+    11.  Price
+************************/
+
+.pricing-rates {
+    transition: all 0.5s ease;
+    .price {
+        font-weight: 400;
+    }
+    .feature {
+        .feature-list {
+            margin: auto auto 5px;
+            font-size: 15px;
+        }
+    }
+    &.best-plan {
+        .lable {
+            width: 200px;
+            position: absolute;
+            top: 15px;
+            right: -65px;
+            transform: rotate(45deg);
+            z-index: 1;
+            .best {
+                font-size: 12px !important;
+            }
+        }
+    }
+}

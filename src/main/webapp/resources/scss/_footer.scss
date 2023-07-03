@@ -1,0 +1,47 @@
+//
+// _footer.scss
+//
+
+/************************
+    15.  Footer
+************************/
+
+.footer {
+    position: relative;
+    padding: 60px 0;
+    color: $gray-500;
+    .logo-footer {
+        font-weight: 700;
+        font-size: 24px;
+        letter-spacing: 1px;
+        .logo-icon {
+            height: 32px;
+        }
+    }
+    .footer-head {
+        letter-spacing: 1px;         
+        font-weight: 400 !important;
+    }
+    .text-foot {
+        color: lighten($gray-600, 20%);
+    }
+    .footer-list {
+        margin-bottom: 0;
+        li {
+            margin-bottom: 10px;
+            a{
+                transition: all 0.5s ease;
+                &:hover {
+                    color: lighten($gray-500, 20%);
+                }
+            }   
+            &:last-child{
+                margin-bottom: 0;
+            }         
+        }
+    }    
+    &.footer-bar {
+        padding: 0 0 30px 0;
+        // border-top: 1px solid lighten($gray-700, 10%);
+    }
+}

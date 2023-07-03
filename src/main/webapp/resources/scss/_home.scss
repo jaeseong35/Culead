@@ -1,0 +1,153 @@
+//
+// home.scss
+//
+
+/************************
+    7.  HOme
+************************/
+@mixin home-common {
+    background-size: cover;
+    align-self: center;
+    position: relative;
+    background-position: center center;
+}
+.bg-home {
+    height: 100vh;    
+    @include home-common();
+}
+.bg-half-260 {
+    padding: 260px 0;    
+    @include home-common();
+}
+.bg-half-170 {
+    padding: 170px 0;    
+    @include home-common();
+}
+
+.bg-half {
+    padding: 184px 0 90px;
+    @include home-common();
+}
+
+.user-pages {
+    height: 100vh;
+    @include home-common();
+}
+
+//Index.html
+.shape-before {
+    .shape-img {
+        position: absolute;
+        top: -60px;
+        left: -75px;
+        z-index: -1;
+        height: auto;
+        overflow: hidden;
+    }
+}
+
+//saas
+.home-dashboard {
+    img {
+        position: relative;
+        top: 60px;
+        z-index: 1;
+    }
+}
+
+//Home four
+.home-slider {
+    .carousel-control-next,
+    .carousel-control-prev {
+        width: 30px;
+        height: 30px;
+        margin: auto;
+    }
+    .carousel-item,
+    .carousel {
+        height: 100vh;
+        width: 100%;
+    }
+    .carousel-item {
+        background-position: center center;
+        background-size: cover;
+        &.active {
+            display: flex;
+        }
+    }
+}
+
+.carousel-control-next-icon, 
+.carousel-control-prev-icon {
+    width: 8px;
+    height: 8px;
+}
+
+.index-wrapper {
+    &:before {
+        content: "";
+        position: absolute;
+        bottom: 35rem;
+        right: 55rem;
+        width: 60rem;
+        height: 35rem;
+        transform: rotate(75deg);
+        background: linear-gradient(90deg, lighten($primary, 10%), transparent);
+        z-index: 1;
+    }
+}
+
+//home-8
+.dashboard-shape-two {
+    &:before {
+        content: "";
+        position: absolute;
+        bottom: 5rem;
+        right: -35rem;
+        width: 70rem;
+        height: 50rem;
+        z-index: -1;
+        background-color: $primary;
+        border-radius: 30rem;
+        transform: rotate(-45deg);
+        opacity: 0.8;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .bg-half {
+        padding: 169px 0 50px;
+    }
+    
+    .index-wrapper {
+        &:before {
+            right: 0;
+            transform: rotate(61deg);
+        }
+    }
+}
+      
+@media (max-width: 767px) {
+    .bg-home, .bg-half-170, .bg-half-260, .main-slider .slides .bg-slider, .bg-marketing, .user-pages {        
+        padding: 150px 0;
+        height: auto;
+    } 
+
+    .dashboard-shape-two { 
+        &:before {
+            bottom: -5rem;
+            right: -10rem;
+            width: 30rem;
+            height: 24rem;
+            border-radius: 8rem;
+        } 
+    }
+
+    .app-image-fluid {
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
